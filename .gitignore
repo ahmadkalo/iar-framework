@@ -9,6 +9,9 @@
 .settings/
 *.sublime-workspace
 
+# dependencies
+/backend/node_modules
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
@@ -16,38 +19,6 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
-
-# compiled output
-/frontend_old/dist
-/frontend_old/tmp
-/frontend_old/out-tsc
-# Only exists if Bazel was run
-/frontend_old/bazel-out
-
-# dependencies
-/frontend_old/node_modules
-/backend/node_modules
-
-# profiling files
-/frontend_old/chrome-profiler-events*.json
-/frontend_old/speed-measure-plugin*.json
-
-# misc
-/frontend_old/.sass-cache
-/frontend_old/connect.lock
-/frontend_old/coverage
-/frontend_old/libpeerconnection.log
-/frontend_old/npm-debug.log
-/frontend_old/yarn-error.log
-/frontend_old/testem.log
-/frontend_old/typings
-
-# System Files
-/frontend_old/.DS_Store
-/frontend_old/Thumbs.db
-
-/frontend_old/.angular/
-
 
 # Compiled output
 /frontend/dist
