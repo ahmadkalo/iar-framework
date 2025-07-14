@@ -1,5 +1,5 @@
 /**
- * this model specifies the format to exchange credentials with the frontend
+ * this model specifies the format to exchange credentials with the frontend_old
  * @param {string} username
  * @param {string} password
  */

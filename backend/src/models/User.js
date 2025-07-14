@@ -1,5 +1,5 @@
 /**
- * this model specifies the format to exchange userdata with the frontend and store it in mongoDB
+ * this model specifies the format to exchange userdata with the frontend_old and store it in mongoDB
  * @param {string} username
  * @param {string} firstname
  * @param {string} lastname

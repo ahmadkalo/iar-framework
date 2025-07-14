@@ -13,7 +13,7 @@ import {NotFoundPageComponent} from './pages/not-found-page/not-found-page.compo
   It is also possible to read parameters from the path they have to be specified with ':' in the path.
 
   If a new page should also show up in the menu bar, you need to add it there too.
-  Look at: frontend/src/app/components/menu-bar/menu-bar.component.ts
+  Look at: frontend_old/src/app/components/menu-bar/menu-bar.component.ts
  */
 const routes: Routes = [
     {path: 'login', component: LoginPageComponent},

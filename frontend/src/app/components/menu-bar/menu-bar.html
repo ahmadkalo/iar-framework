@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+    <mat-icon class="app-icon" fontIcon="token"></mat-icon>
+    <span class="appName">Integration Architectures</span>
+    @for (button of buttons; track $index) {
+        <button class="menu-button" routerLinkActive="mat-tonal-button" [routerLinkActiveOptions]="{exact: true}" [routerLink]="button.routerLink" matButton>{{button.title}}</button>
+    }
+    <span class="spacer"></span>
+    @if (user){
+        <span class="user-displayname">{{user.firstname + ' ' + user.lastname}}</span>
+    }
+    <button matIconButton (click)="handleLogout()">
+        <mat-icon fontIcon="logout"></mat-icon>
+    </button>
+</mat-toolbar>
