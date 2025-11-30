@@ -28,3 +28,27 @@ exports.login = async function () {
         throw new Error("Login failed");
     }
 };
+
+// ➕ NEU: GET ALL EMPLOYEES
+exports.getAllEmployees = async function () {
+    try {
+        const tokenData = await exports.login();
+        const accessToken = tokenData.access_token;
+
+        const response = await axios.get(
+            `${env.ORANGEHRM_API_BASE_URL}/employee/search`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    Accept: "application/json"
+                }
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("OrangeHRM getAllEmployees error:", error.response?.data || error);
+        throw new Error("Failed to fetch employees");
+    }
+};
+

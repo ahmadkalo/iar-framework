@@ -8,3 +8,13 @@ exports.login = async function (req, res) {
         res.status(500).send({ error: "OrangeHRM login failed" });
     }
 };
+
+exports.getAllEmployees = async function (req, res) {
+    try {
+        const employees = await orangehrmService.getAllEmployees();
+        res.send(employees);
+    } catch (err) {
+        res.status(500).send({ error: "Failed to fetch employees" });
+    }
+};
+
