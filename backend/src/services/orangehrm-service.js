@@ -29,7 +29,7 @@ exports.login = async function () {
     }
 };
 
-// ➕ NEU: GET ALL EMPLOYEES
+
 exports.getAllEmployees = async function () {
     try {
         const tokenData = await exports.login();
@@ -49,6 +49,30 @@ exports.getAllEmployees = async function () {
     } catch (error) {
         console.error("OrangeHRM getAllEmployees error:", error.response?.data || error);
         throw new Error("Failed to fetch employees");
+    }
+};
+
+exports.getEmployeeById = async function (id) {
+    try {
+        // 1. Access-Token holen (wie bei getAllEmployees)
+        const tokenResponse = await exports.login();
+        const accessToken = tokenResponse.access_token;
+
+        // 2. Request an OrangeHRM
+        const url = `${env.ORANGEHRM_API_BASE_URL}/employee/${id}`;
+
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                Accept: "application/json"
+            }
+        });
+
+        // OrangeHRM steckt die eigentlichen Daten meist in response.data.data
+        return response.data.data ?? response.data;
+    } catch (error) {
+        console.error("OrangeHRM getEmployeeById error:", error.response?.data || error);
+        throw new Error("Failed to fetch employee");
     }
 };
 

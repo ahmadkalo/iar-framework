@@ -18,3 +18,19 @@ exports.getAllEmployees = async function (req, res) {
     }
 };
 
+
+exports.getEmployeeById = async function (req, res) {
+    try {
+        const id = req.params.id;
+        const employee = await orangehrmService.getEmployeeById(id);
+
+        if (!employee) {
+            return res.status(404).send({ message: "Employee not found" });
+        }
+
+        res.send(employee);
+    } catch (err) {
+        console.error("OrangeHRM getEmployeeById error:", err);
+        res.status(500).send({ error: "Failed to fetch employee" });
+    }
+};
