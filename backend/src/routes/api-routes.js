@@ -2,64 +2,193 @@ const express = require('express');
 const router = express.Router();
 const { checkAuthorization } = require('../middlewares/auth-middleware');
 
-/* -------------------------------
-   AUTHENTICATION ENDPOINTS
---------------------------------*/
 const authApi = require('../apis/auth-api');
-router.post('/login', authApi.login);
-router.delete('/login', checkAuthorization(), authApi.logout);
-router.get('/login', authApi.isLoggedIn);
-
-/* -------------------------------
-   USER ENDPOINTS
---------------------------------*/
 const userApi = require('../apis/user-api');
-router.get('/user', checkAuthorization(), userApi.getSelf);
-
-/* -------------------------------
-   PEOPLE DEMO ENDPOINT
---------------------------------*/
 const peopleDemoApi = require('../apis/people-demo-api');
-router.get('/people', checkAuthorization(), peopleDemoApi.getPeople);
-
-/* -------------------------------
-   SALESMEN ENDPOINTS
---------------------------------*/
 const salesmenApi = require('../apis/salesmen-api');
-
-// GET all salesmen
-router.get('/salesmen', checkAuthorization(), salesmenApi.getAll);
-
-// GET single salesman
-router.get('/salesmen/:id', checkAuthorization(), salesmenApi.getById);
-
-// POST new salesman (admin only)
-router.post('/salesmen', checkAuthorization(true), salesmenApi.add);
-
-// UPDATE salesman (admin only)
-router.put('/salesmen/:id', checkAuthorization(true), salesmenApi.update);
-
-// DELETE salesman (admin only)
-router.delete('/salesmen/:id', checkAuthorization(true), salesmenApi.remove);
-
-/* -------------------------------
-   SOCIAL PERFORMANCE ENDPOINTS
---------------------------------*/
 const socialApi = require('../apis/socialPerformance-api');
 
-// GET all records
+/**
+ * @swagger
+ * tags:
+ *   - name: Auth
+ *     description: Login & Session Management
+ *   - name: User
+ *   - name: Salesmen
+ *   - name: SocialPerformance
+ */
+
+//
+// AUTH
+//
+
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Login user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       401:
+ *         description: Login failed
+ */
+router.post('/login', authApi.login);
+
+/**
+ * @swagger
+ * /api/login:
+ *   delete:
+ *     tags: [Auth]
+ *     summary: Logout user
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ */
+router.delete('/login', checkAuthorization(), authApi.logout);
+
+/**
+ * @swagger
+ * /api/login:
+ *   get:
+ *     tags: [Auth]
+ *     summary: Check if user is logged in
+ *     responses:
+ *       200:
+ *         description: Login status
+ */
+router.get('/login', authApi.isLoggedIn);
+
+//
+// USER SELF
+//
+
+/**
+ * @swagger
+ * /api/user:
+ *   get:
+ *     tags: [User]
+ *     summary: Get currently logged-in user
+ *     responses:
+ *       200:
+ *         description: User info
+ */
+router.get('/user', checkAuthorization(), userApi.getSelf);
+
+
+
+//
+// SALESMEN
+//
+
+/**
+ * @swagger
+ * /api/salesmen:
+ *   get:
+ *     tags: [Salesmen]
+ *     summary: Get all salesmen
+ */
+router.get('/salesmen', checkAuthorization(), salesmenApi.getAll);
+
+/**
+ * @swagger
+ * /api/salesmen/{id}:
+ *   get:
+ *     tags: [Salesmen]
+ *     summary: Get salesman by ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ */
+router.get('/salesmen/:id', checkAuthorization(), salesmenApi.getById);
+
+/**
+ * @swagger
+ * /api/salesmen:
+ *   post:
+ *     tags: [Salesmen]
+ *     summary: Add new salesman (ADMIN ONLY)
+ */
+router.post('/salesmen', checkAuthorization(true), salesmenApi.add);
+
+/**
+ * @swagger
+ * /api/salesmen/{id}:
+ *   put:
+ *     tags: [Salesmen]
+ *     summary: Update salesman (ADMIN ONLY)
+ */
+router.put('/salesmen/:id', checkAuthorization(true), salesmenApi.update);
+
+/**
+ * @swagger
+ * /api/salesmen/{id}:
+ *   delete:
+ *     tags: [Salesmen]
+ *     summary: Delete salesman (ADMIN ONLY)
+ */
+router.delete('/salesmen/:id', checkAuthorization(true), salesmenApi.remove);
+
+//
+// SOCIAL PERFORMANCE
+//
+
+/**
+ * @swagger
+ * /api/socialPerformance:
+ *   get:
+ *     tags: [SocialPerformance]
+ *     summary: Get all social performance entries
+ */
 router.get('/socialPerformance', checkAuthorization(), socialApi.getAll);
 
-// GET records for salesman
+/**
+ * @swagger
+ * /api/socialPerformance/{sid}:
+ *   get:
+ *     tags: [SocialPerformance]
+ *     summary: Get records for a specific salesman
+ */
 router.get('/socialPerformance/:sid', checkAuthorization(), socialApi.getBySid);
 
-// POST new record (admin only)
+/**
+ * @swagger
+ * /api/socialPerformance:
+ *   post:
+ *     tags: [SocialPerformance]
+ *     summary: Add new social performance record (ADMIN ONLY)
+ */
 router.post('/socialPerformance', checkAuthorization(true), socialApi.add);
 
-// UPDATE record (admin only)
+/**
+ * @swagger
+ * /api/socialPerformance/{sid}/{category}:
+ *   put:
+ *     tags: [SocialPerformance]
+ *     summary: Update performance record (ADMIN ONLY)
+ */
 router.put('/socialPerformance/:sid/:category', checkAuthorization(true), socialApi.update);
 
-// DELETE record (admin only)
+/**
+ * @swagger
+ * /api/socialPerformance/{sid}/{category}:
+ *   delete:
+ *     tags: [SocialPerformance]
+ *     summary: Delete performance record (ADMIN ONLY)
+ */
 router.delete('/socialPerformance/:sid/:category', checkAuthorization(true), socialApi.remove);
 
 module.exports = router;
