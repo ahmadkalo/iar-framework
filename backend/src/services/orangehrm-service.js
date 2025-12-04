@@ -122,8 +122,6 @@ exports.getAllBonus = async function (employeeId) {
 
         const allBonuses = response.data.data || response.data;
 
-
-
         return allBonuses;
     } catch (error) {
         console.error("OrangeHRM getBonusSalary error:", error.response?.data || error);
