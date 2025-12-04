@@ -22,7 +22,7 @@ exports.login = async function () {
             }
         );
 
-        return response.data; // give back the access_token
+        return response.data;
     } catch (error) {
         console.error("OrangeHRM login error:", error.response?.data || error);
         throw new Error("Login failed");
@@ -95,7 +95,6 @@ exports.getBonusSalary = async function (employeeId, year) {
 
         const allBonuses = response.data.data || response.data;
 
-        // ➜ Filter out the year
         const filtered = allBonuses.filter(b => b.year == year);
 
         return filtered;
@@ -107,7 +106,7 @@ exports.getBonusSalary = async function (employeeId, year) {
 
 
 // GET All Bonus Salaries
-exports.getAllBonusSalaries = async function (employeeId) {
+exports.getAllBonus = async function (employeeId) {
     try {
         const tokenData = await exports.login();
         const accessToken = tokenData.access_token;
@@ -121,13 +120,16 @@ exports.getAllBonusSalaries = async function (employeeId) {
             }
         });
 
-        return response.data;
+        const allBonuses = response.data.data || response.data;
+
+
+
+        return allBonuses;
     } catch (error) {
-        console.error("OrangeHRM getAllBonusSalaries error:", error.response?.data || error);
-        throw new Error("Failed to fetch all bonus salaries");
+        console.error("OrangeHRM getBonusSalary error:", error.response?.data || error);
+        throw new Error("Failed to fetch bonus salary");
     }
 };
-
 
 // POST Bonus Salary
 exports.addBonusSalary = async function (employeeId, year, value) {
@@ -179,4 +181,6 @@ exports.deleteBonusSalary = async function (employeeId, year) {
         throw new Error("Failed to delete bonus salary");
     }
 };
+
+
 

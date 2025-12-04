@@ -65,6 +65,7 @@ router.get("/employees", orangehrmApi.getAllEmployees);
 router.get("/employees/:id", orangehrmApi.getEmployeeById);
 
 
+
 /**
  * @swagger
  * /orangehrm/bonus/{id}/{year}:
@@ -114,7 +115,8 @@ router.get("/bonus/:id/:year", orangehrmApi.getBonus);
  *       500:
  *         description: Error fetching bonus salary records
  */
-router.get("/bonus/all/:id", orangehrmApi.getAllBonus);
+router.get("/bonus/:id", orangehrmApi.getAllBonus);
+
 
 
 /**

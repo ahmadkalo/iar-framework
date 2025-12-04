@@ -46,12 +46,15 @@ exports.getBonus = async function (req, res) {
         res.status(500).send({ error: "Failed to fetch bonus salary" });
     }
 };
+
 // GET All Bonus
 exports.getAllBonus = async function (req, res) {
     try {
-        const { id } = req.params; // employeeId
-        const result = await orangehrmService.getAllBonusSalaries(id);
-        res.send(result);
+        const { id } = req.params;
+        const bonuses = await orangehrmService.getAllBonus(id);
+
+        res.status(200).send(bonuses);
+
     } catch (err) {
         res.status(500).send({ error: "Failed to fetch all bonus salaries" });
     }
