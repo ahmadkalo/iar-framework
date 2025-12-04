@@ -21,31 +21,31 @@ app.set('environment', environment);
 
 
 //  Swagger SETUP
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "SmartHoover REST API",
+            title: "SmartHoover API",
             version: "1.0.0",
-            description: "Preliminary documentation for OrangeHRM, OpenCRX and local modules"
+            description: "API documentation for SmartHoover Integration",
         },
-        servers: [
-            {
-                url: "http://localhost:" + environment.port,
-                description: "Local development environment"
-            }
-        ]
     },
     apis: ["./src/routes/*.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-// Make docs available at /api-docs
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
+const fs = require("fs");
+fs.writeFileSync("./swagger.json", JSON.stringify(swaggerSpec, null, 2));
+console.log("Swagger JSON generated: swagger.json");
+
 
 
 //  MIDDLEWARE

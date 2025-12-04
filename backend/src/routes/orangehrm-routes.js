@@ -97,7 +97,7 @@ router.get("/bonus/:id/:year", orangehrmApi.getBonus);
 
 /**
  * @swagger
- * /orangehrm/bonus/all/{id}:
+ * /orangehrm/bonus/{id}:
  *   get:
  *     summary: Retrieve all bonus salary entries for an employee
  *     description: Returns all bonus salary records stored for a given employee across all years.
