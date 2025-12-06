@@ -77,6 +77,81 @@ exports.getEmployeeById = async function (id) {
     }
 };
 
+// GET Work Experience of an Employee
+exports.getWorkExperience = async function (employeeId) {
+    try {
+        const tokenData = await exports.login();
+        const accessToken = tokenData.access_token;
+
+        const url = `${env.ORANGEHRM_API_BASE_URL}/employee/${employeeId}/work-experience`;
+
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                Accept: "application/json"
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("OrangeHRM getWorkExperience error:", error.response?.data || error);
+        throw new Error("Failed to fetch work experience");
+    }
+};
+
+
+// POST Add Work Experience
+exports.addWorkExperience = async function (employeeId, payload) {
+    try {
+        const tokenData = await exports.login();
+        const accessToken = tokenData.access_token;
+
+        const url = `${env.ORANGEHRM_API_BASE_URL}/employee/${employeeId}/work-experience`;
+
+        const response = await axios.post(url, payload, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/x-www-form-urlencoded",
+                Accept: "application/json"
+            }
+        });
+
+        return response.data; // contains seqId
+    } catch (error) {
+        console.error("OrangeHRM addWorkExperience error:", error.response?.data || error);
+        throw new Error("Failed to add work experience");
+    }
+};
+
+// DELETE Work Experience by seqId
+exports.deleteWorkExperience = async function (employeeId, seqId) {
+    try {
+        const tokenData = await exports.login();
+        const accessToken = tokenData.access_token;
+
+        const url = `${env.ORANGEHRM_API_BASE_URL}/employee/${employeeId}/work-experience`;
+
+        // Body wie im funktionierenden Postman-Request
+        const body = new URLSearchParams();
+        body.append("id", String(employeeId));
+        body.append("seqId", String(seqId));
+
+        const response = await axios.delete(url, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            data: body.toString()
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("OrangeHRM deleteWorkExperience error:", error.response?.data || error);
+        throw new Error("Failed to delete work experience");
+    }
+};
+
 
 // GET Bonus Salary
 exports.getBonusSalary = async function (employeeId, year) {
@@ -179,82 +254,6 @@ exports.deleteBonusSalary = async function (employeeId, year) {
         throw new Error("Failed to delete bonus salary");
     }
 };
-
-// GET Work Experience of an Employee
-exports.getWorkExperience = async function (employeeId) {
-    try {
-        const tokenData = await exports.login();
-        const accessToken = tokenData.access_token;
-
-        const url = `${env.ORANGEHRM_API_BASE_URL}/employee/${employeeId}/work-experience`;
-
-        const response = await axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                Accept: "application/json"
-            }
-        });
-
-        return response.data;
-    } catch (error) {
-        console.error("OrangeHRM getWorkExperience error:", error.response?.data || error);
-        throw new Error("Failed to fetch work experience");
-    }
-};
-
-
-// POST Add Work Experience
-exports.addWorkExperience = async function (employeeId, payload) {
-    try {
-        const tokenData = await exports.login();
-        const accessToken = tokenData.access_token;
-
-        const url = `${env.ORANGEHRM_API_BASE_URL}/employee/${employeeId}/work-experience`;
-
-        const response = await axios.post(url, payload, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/x-www-form-urlencoded",
-                Accept: "application/json"
-            }
-        });
-
-        return response.data; // contains seqId
-    } catch (error) {
-        console.error("OrangeHRM addWorkExperience error:", error.response?.data || error);
-        throw new Error("Failed to add work experience");
-    }
-};
-
-// DELETE Work Experience by seqId
-exports.deleteWorkExperience = async function (employeeId, seqId) {
-    try {
-        const tokenData = await exports.login();
-        const accessToken = tokenData.access_token;
-
-        const url = `${env.ORANGEHRM_API_BASE_URL}/employee/${employeeId}/work-experience`;
-
-        // Body wie im funktionierenden Postman-Request
-        const body = new URLSearchParams();
-        body.append("id", String(employeeId));
-        body.append("seqId", String(seqId));
-
-        const response = await axios.delete(url, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                Accept: "application/json",
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            data: body.toString()
-        });
-
-        return response.data;
-    } catch (error) {
-        console.error("OrangeHRM deleteWorkExperience error:", error.response?.data || error);
-        throw new Error("Failed to delete work experience");
-    }
-};
-
 
 
 

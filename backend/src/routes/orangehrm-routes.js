@@ -64,6 +64,107 @@ router.get("/employees", orangehrmApi.getAllEmployees);
  */
 router.get("/employees/:id", orangehrmApi.getEmployeeById);
 
+/**
+ * @swagger
+ * /orangehrm/employees/{id}/work-experience:
+ *   get:
+ *     summary: Get all work experience records of an employee
+ *     description: Returns all stored work experience entries for the specified employee.
+ *     tags: [OrangeHRM]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Employee ID in OrangeHRM
+ *     responses:
+ *       200:
+ *         description: List of work experience entries
+ *       404:
+ *         description: Employee not found
+ *       500:
+ *         description: Error while fetching work experience from OrangeHRM
+ */
+router.get("/employees/:id/work-experience", orangehrmApi.getWorkExperience);
+
+/**
+ * @swagger
+ * /orangehrm/employees/{id}/work-experience:
+ *   post:
+ *     summary: Add a new work experience entry for an employee
+ *     description: Creates a new work experience record inside OrangeHRM and returns the assigned seqId.
+ *     tags: [OrangeHRM]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Employee ID in OrangeHRM
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               company:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *               fromDate:
+ *                 type: string
+ *                 example: "2003-03-01"
+ *               toDate:
+ *                 type: string
+ *                 example: "2006-03-01"
+ *               comment:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Work experience successfully added
+ *       400:
+ *         description: Invalid input data
+ *       500:
+ *         description: Error while saving work experience into OrangeHRM
+ */
+router.post("/employees/:id/work-experience", orangehrmApi.addWorkExperience);
+
+/**
+ * @swagger
+ * /orangehrm/employees/{id}/work-experience:
+ *   delete:
+ *     summary: Delete a specific work experience record
+ *     description: Deletes a work experience entry for a given employee.
+ *                  The seqId must be passed as a query parameter.
+ *     tags: [OrangeHRM]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Employee ID in OrangeHRM
+ *       - in: query
+ *         name: seqId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Sequence ID of the work experience entry to delete
+ *     responses:
+ *       200:
+ *         description: Work experience entry deleted successfully
+ *       404:
+ *         description: Employee or work experience entry not found
+ *       500:
+ *         description: Error while deleting the work experience entry
+ */
+
+router.delete("/employees/:id/work-experience", orangehrmApi.deleteWorkExperience);
+
 
 
 /**
@@ -175,109 +276,6 @@ router.post("/bonus", orangehrmApi.addBonus);
  *         description: Failed to delete bonus entry
  */
 router.delete("/bonus/:id/:year", orangehrmApi.deleteBonus);
-
-/**
- * @swagger
- * /orangehrm/employees/{id}/work-experience:
- *   get:
- *     summary: Get all work experience records of an employee
- *     description: Returns all stored work experience entries for the specified employee.
- *     tags: [OrangeHRM]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Employee ID in OrangeHRM
- *     responses:
- *       200:
- *         description: List of work experience entries
- *       404:
- *         description: Employee not found
- *       500:
- *         description: Error while fetching work experience from OrangeHRM
- */
-router.get("/employees/:id/work-experience", orangehrmApi.getWorkExperience);
-
-/**
- * @swagger
- * /orangehrm/employees/{id}/work-experience:
- *   post:
- *     summary: Add a new work experience entry for an employee
- *     description: Creates a new work experience record inside OrangeHRM and returns the assigned seqId.
- *     tags: [OrangeHRM]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Employee ID in OrangeHRM
- *     requestBody:
- *       required: true
- *       content:
- *         application/x-www-form-urlencoded:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: string
- *               company:
- *                 type: string
- *               title:
- *                 type: string
- *               fromDate:
- *                 type: string
- *                 example: "2003-03-01"
- *               toDate:
- *                 type: string
- *                 example: "2006-03-01"
- *               comment:
- *                 type: string
- *     responses:
- *       200:
- *         description: Work experience successfully added
- *       400:
- *         description: Invalid input data
- *       500:
- *         description: Error while saving work experience into OrangeHRM
- */
-router.post("/employees/:id/work-experience", orangehrmApi.addWorkExperience);
-
-/**
- * @swagger
- * /orangehrm/employees/{id}/work-experience:
- *   delete:
- *     summary: Delete a specific work experience record
- *     description: Deletes a work experience entry for a given employee.
- *                  The seqId must be passed as a query parameter.
- *     tags: [OrangeHRM]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Employee ID in OrangeHRM
- *       - in: query
- *         name: seqId
- *         required: true
- *         schema:
- *           type: integer
- *         description: Sequence ID of the work experience entry to delete
- *     responses:
- *       200:
- *         description: Work experience entry deleted successfully
- *       404:
- *         description: Employee or work experience entry not found
- *       500:
- *         description: Error while deleting the work experience entry
- */
-
-router.delete("/employees/:id/work-experience", orangehrmApi.deleteWorkExperience);
-
-
 
 
 module.exports = router;

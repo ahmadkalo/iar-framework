@@ -36,6 +36,49 @@ exports.getEmployeeById = async function (req, res) {
 };
 
 
+// GET Work Experience
+exports.getWorkExperience = async function (req, res) {
+    try {
+        const { id } = req.params;
+        const result = await orangehrmService.getWorkExperience(id);
+        res.send(result);
+    } catch (err) {
+        res.status(500).send({ error: "Failed to fetch work experience" });
+    }
+};
+
+// POST Work Experience
+exports.addWorkExperience = async function (req, res) {
+    try {
+        const { id } = req.params;
+        const payload = req.body;
+
+        const result = await orangehrmService.addWorkExperience(id, payload);
+        res.send(result);
+    } catch (err) {
+        res.status(500).send({ error: "Failed to add work experience" });
+    }
+};
+
+// DELETE Work Experience
+exports.deleteWorkExperience = async function (req, res) {
+    try {
+        const employeeId = req.params.id;
+        const seqId = req.query.seqId || req.body.seqId;
+
+        if (!seqId) {
+            return res.status(400).send({ error: "seqId is required" });
+        }
+
+        const result = await orangehrmService.deleteWorkExperience(employeeId, seqId);
+        res.send(result);
+    } catch (error) {
+        console.error("Route deleteWorkExperience error:", error);
+        res.status(500).send({ error: "Failed to delete work experience" });
+    }
+};
+
+
 // GET Bonus Salary
 exports.getBonus = async function (req, res) {
     try {
@@ -88,50 +131,6 @@ exports.deleteBonus = async function (req, res) {
         res.status(500).send({ error: "Failed to delete bonus salary" });
     }
 };
-
-// GET Work Experience
-exports.getWorkExperience = async function (req, res) {
-    try {
-        const { id } = req.params;
-        const result = await orangehrmService.getWorkExperience(id);
-        res.send(result);
-    } catch (err) {
-        res.status(500).send({ error: "Failed to fetch work experience" });
-    }
-};
-
-// POST Work Experience
-exports.addWorkExperience = async function (req, res) {
-    try {
-        const { id } = req.params;
-        const payload = req.body;
-
-        const result = await orangehrmService.addWorkExperience(id, payload);
-        res.send(result);
-    } catch (err) {
-        res.status(500).send({ error: "Failed to add work experience" });
-    }
-};
-
-// DELETE Work Experience
-exports.deleteWorkExperience = async function (req, res) {
-    try {
-        const employeeId = req.params.id;
-        const seqId = req.query.seqId || req.body.seqId;
-
-        if (!seqId) {
-            return res.status(400).send({ error: "seqId is required" });
-        }
-
-        const result = await orangehrmService.deleteWorkExperience(employeeId, seqId);
-        res.send(result);
-    } catch (error) {
-        console.error("Route deleteWorkExperience error:", error);
-        res.status(500).send({ error: "Failed to delete work experience" });
-    }
-};
-
-
 
 
 
