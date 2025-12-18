@@ -4,7 +4,6 @@ const { checkAuthorization } = require('../middlewares/auth-middleware');
 
 const authApi = require('../apis/auth-api');
 const userApi = require('../apis/user-api');
-const peopleDemoApi = require('../apis/people-demo-api');
 const salesmenApi = require('../apis/salesmen-api');
 const socialApi = require('../apis/socialPerformance-api');
 
