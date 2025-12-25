@@ -3,8 +3,14 @@ exports.getAll = async function (db) {
 };
 
 exports.getBySid = async function (db, sid) {
-    return db.collection("socialPerformances").find({ sid: sid }).toArray();
+    const s = String(sid);
+    const n = Number(sid);
+
+    return db.collection("socialPerformances").find({
+        $or: [{ sid: n }, { sid: s }]
+    }).toArray();
 };
+
 
 exports.add = async function (db, record) {
     return (await db.collection("socialPerformances").insertOne(record)).insertedId;

@@ -1,41 +1,38 @@
 const socialService = require("./socialPerformance-service");
-const opencrxService = require("./opencrx-service");
-const orangehrmService = require("./orangehrm-service");
-
+const salesmenService = require("./salesmen-service");
 const { calculateSocialBonus } = require("../utils/social-bonus");
-const { calculateOrderBonus } = require("../utils/order-bonus");
 
-exports.computeBonus = async function (db, employeeId, year) {
+exports.computeSocialBonus = async function (db, employeeId, targetYear) {
+    const empId = Number(employeeId);
+    const year = Number(targetYear);
 
-    // 1. Stammdaten (nur zur Anzeige / Prüfung)
-    const employee = await orangehrmService.getEmployeeById(employeeId);
+    // 1) Salesman aus MongoDB (Collection: salesmen)
+    const salesman = await salesmenService.getById(db, empId);
 
-    // 2. Social Performance
-    const socialRecords = await socialService.getBySid(db, employeeId);
-    const socialBonus = calculateSocialBonus(
-        socialRecords.filter(r => r.year == year)
-    );
+    const fullName = salesman
+        ? `${salesman.firstname || ""} ${salesman.lastname || ""}`.trim()
+        : `Employee ${empId}`;
 
-    // 3. Order Bonus (vereinfacht)
-    const salesOrders = await opencrxService.getAllSalesOrders();
-    let products = [];
+    // 2) SocialPerformances holen
+    const records = await socialService.getBySid(db, empId);
 
-    for (let o of salesOrders) {
-        const orderProducts = await opencrxService.getProductsOfSalesOrder(o.id);
-        products.push(...orderProducts);
-    }
+    // optional: nur <= targetYear
+    const filtered = records.filter(r => Number(r.year) <= year);
 
-    const orderBonus = calculateOrderBonus(products);
+    // 3) Bonus berechnen
+    const { total, breakdown } = calculateSocialBonus(filtered, year);
 
-    const totalBonus = socialBonus + orderBonus;
+    // 4) Message für Postman
+    const message = `The social performance of employee ${fullName} has a social bonus of ${total}€ for year ${year}.`;
 
     return {
-        employee,
+        message,
+        employee: {
+            employeeId: empId,
+            fullName: fullName
+        },
         year,
-        socialBonus,
-        orderBonus,
-        totalBonus
+        socialBonus: total,
+        breakdown
     };
-
-
 };

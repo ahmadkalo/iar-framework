@@ -76,6 +76,12 @@ app.use("/api/orangehrm", orangehrmRoutes);
 const apiRouter = require('./routes/api-routes');
 app.use('/api', apiRouter);
 
+const employeeRoutes = require("./routes/employee-routes");
+app.use("/api", employeeRoutes);
+
+const bonusRoutes = require("./routes/bonus-routes");
+app.use("/api", bonusRoutes);
+
 
 //  DATABASE INIT
 let db_credentials = '';

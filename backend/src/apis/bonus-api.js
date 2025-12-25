@@ -1,10 +1,14 @@
 const bonusService = require("../services/bonus-service");
 
-exports.computeBonus = async (req, res) => {
-    const db = req.app.get("db");
-    const { employeeId, year } = req.params;
+exports.computeSocialBonus = async (req, res) => {
+    try {
+        const db = req.app.get("db");
+        const { employeeId, year } = req.params;
 
-    const result = await bonusService.computeBonus(db, employeeId, year);
-
-    res.send(result);
+        const result = await bonusService.computeSocialBonus(db, employeeId, year);
+        res.send(result);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send({ error: "Failed to compute social bonus" });
+    }
 };
