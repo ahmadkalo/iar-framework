@@ -12,3 +12,16 @@ exports.computeSocialBonus = async (req, res) => {
         res.status(500).send({ error: "Failed to compute social bonus" });
     }
 };
+
+exports.computeAndStoreSocialBonus = async (req, res) => {
+    try {
+        const db = req.app.get("db");
+        const { employeeId, year } = req.params;
+
+        const result = await bonusService.computeAndStoreSocialBonus(db, employeeId, year);
+        res.send(result);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send({ error: "Failed to compute/store social bonus in OrangeHRM" });
+    }
+};
