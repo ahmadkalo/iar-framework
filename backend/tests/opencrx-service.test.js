@@ -4,7 +4,6 @@ const opencrxService = require("../src/services/opencrx-service");
 
 describe("OpenCRX Service Integration Tests (stubbed)", () => {
     afterEach(() => {
-        // client wieder zurücksetzen
         if (opencrxService._resetClient) opencrxService._resetClient();
         sinon.restore();
     });
