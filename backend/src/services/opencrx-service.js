@@ -12,6 +12,16 @@ const opencrxClient = axios.create({
     }
 });
 
+let client = opencrxClient;
+
+exports._setClient = function (newClient) {
+    client = newClient;
+};
+
+exports._resetClient = function () {
+    client = opencrxClient;
+}
+
 // Help function: extracts OpenCRX "objects"
 function extractObjects(response) {
     if (response?.data?.objects) {
@@ -53,7 +63,6 @@ exports.getAllSalesOrders = async function () {
         };
     });
 };
-
 
 
 // GET Sales Order by ID
