@@ -135,4 +135,75 @@ router.get("/salesorders/:id/positions", opencrxApi.getSalesOrderPositions);
  */
 router.get("/salesorders/:id/products", opencrxApi.getProductsOfSalesOrder);
 
+/**
+ * @swagger
+ * /opencrx/salesmen/{employeeId}/orders-evaluation:
+ *   get:
+ *     summary: Orders evaluation (Part A) for a salesman
+ *     description: Returns enriched order data needed for order bonus computation (product, client, ranking, closeProbability, items).
+ *     tags: [OpenCRX]
+ *     parameters:
+ *       - in: path
+ *         name: employeeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: year
+ *         required: false
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Orders evaluation result
+ *       500:
+ *         description: Error while communicating with OpenCRX
+ */
+router.get("/salesmen/:employeeId/orders-evaluation", opencrxApi.getOrdersEvaluationForSalesman);
+
+/**
+ * @swagger
+ * /opencrx/salesmen/{employeeId}/salesorders:
+ *   get:
+ *     summary: Raw sales orders for a salesman (debug)
+ *     tags: [OpenCRX]
+ *     parameters:
+ *       - in: path
+ *         name: employeeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: year
+ *         required: false
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Filtered sales orders
+ *       500:
+ *         description: Error while communicating with OpenCRX
+ */
+router.get("/salesmen/:employeeId/salesorders", opencrxApi.getSalesOrdersForSalesman);
+
+/**
+ * @swagger
+ * /opencrx/salesmen/{employeeId}/mapping:
+ *   get:
+ *     summary: Resolve OpenCRX internal account ID using governmentId
+ *     tags: [OpenCRX]
+ *     parameters:
+ *       - in: path
+ *         name: employeeId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Mapping result
+ *       500:
+ *         description: Error while communicating with OpenCRX
+ */
+router.get("/salesmen/:employeeId/mapping", opencrxApi.getSalesmanMapping);
+
 module.exports = router;
