@@ -4,11 +4,10 @@ const orangehrmService = require("./orangehrm-service");
 const { calculateSocialBonus } = require("../utils/social-bonus");
 const mongodb = require("mongodb");
 
-// Collection-Name für Proposals
+// Collection name for proposals
 const PROPOSALS_COL = "bonusProposals";
 
-// Bestehende Berechnung (wie bei dir) — nur als Beispiel:
-// Du kannst deine aktuelle computeSocialBonus behalten und nur nutzen.
+
 exports.computeSocialBonus = async function (db, employeeId, targetYear) {
     const empId = Number(employeeId);
     const year = Number(targetYear);
@@ -32,7 +31,7 @@ exports.computeSocialBonus = async function (db, employeeId, targetYear) {
     };
 };
 
-// ✅ NEU: Proposal erstellen (statt direkt speichern)
+// Create a proposal
 exports.createSocialBonusProposal = async function (db, employeeId, targetYear, createdBy) {
     const result = await exports.computeSocialBonus(db, employeeId, targetYear);
 
@@ -62,12 +61,12 @@ exports.createSocialBonusProposal = async function (db, employeeId, targetYear, 
     };
 };
 
-// ✅ NEU: Proposal abrufen
+// Retrieve a proposal by ID
 exports.getProposalById = async function (db, proposalId) {
     return db.collection(PROPOSALS_COL).findOne({ _id: new mongodb.ObjectId(proposalId) });
 };
 
-// ✅ NEU: Proposal genehmigen → erst dann OrangeHRM speichern
+// Approve proposal → only then store in OrangeHRM
 exports.approveProposalAndStore = async function (db, proposalId, decidedBy) {
     const proposal = await exports.getProposalById(db, proposalId);
     if (!proposal) return { error: "NOT_FOUND" };
@@ -76,13 +75,21 @@ exports.approveProposalAndStore = async function (db, proposalId, decidedBy) {
         return { error: "NOT_PENDING", status: proposal.status };
     }
 
-    // ⭐ Speichern in OrangeHRM (nur bei APPROVE)
-    await orangehrmService.addBonusSalary(proposal.employeeId, proposal.year, proposal.proposedValue);
+    // Store in OrangeHRM (only on APPROVE)
+    await orangehrmService.addBonusSalary(
+        proposal.employeeId,
+        proposal.year,
+        proposal.proposedValue
+    );
 
-    // Proposal-Status updaten
+    // Update proposal status
     await db.collection(PROPOSALS_COL).updateOne(
         { _id: proposal._id },
-        { $set: { status: "APPROVED", decidedAt: new Date(), decidedBy: decidedBy || "unknown" } }
+        { $set: {
+                status: "APPROVED",
+                decidedAt: new Date(),
+                decidedBy: decidedBy || "unknown"
+            }}
     );
 
     return {
@@ -97,7 +104,7 @@ exports.approveProposalAndStore = async function (db, proposalId, decidedBy) {
     };
 };
 
-// ✅ NEU: Proposal ablehnen → NICHT speichern
+// Reject proposal → DO NOT store in OrangeHRM
 exports.rejectProposal = async function (db, proposalId, decidedBy, reason) {
     const proposal = await exports.getProposalById(db, proposalId);
     if (!proposal) return { error: "NOT_FOUND" };
@@ -113,8 +120,7 @@ exports.rejectProposal = async function (db, proposalId, decidedBy, reason) {
                 decidedAt: new Date(),
                 decidedBy: decidedBy || "unknown",
                 rejectReason: reason || ""
-            }
-        }
+            }}
     );
 
     return {
