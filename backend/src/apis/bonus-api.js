@@ -5,10 +5,18 @@ exports.createSocialBonusProposal = async (req, res) => {
         const db = req.app.get("db");
         const { employeeId, year } = req.params;
 
-        // Wer erstellt? (aus Session, wenn vorhanden)
         const createdBy = req.session?.user?.username;
 
-        const result = await bonusService.createSocialBonusProposal(db, employeeId, year, createdBy);
+        const remark = req.body?.remark || req.body?.remarks || "";
+
+        const result = await bonusService.createSocialBonusProposal(
+            db,
+            employeeId,
+            year,
+            createdBy,
+            remark
+        );
+
         res.status(201).send(result);
     } catch (e) {
         console.error(e);
@@ -65,3 +73,20 @@ exports.rejectProposal = async (req, res) => {
         res.status(500).send({ error: "Failed to reject proposal" });
     }
 };
+
+exports.updateRemarks = async (req, res) => {
+    try {
+        const db = req.app.get("db");
+        const { proposalId } = req.params;
+        const { remarks } = req.body;
+
+        const result = await bonusService.updateRemarks(db, proposalId, remarks);
+
+        if (!result) return res.status(404).send({ message: "Proposal not found" });
+
+        res.send(result);
+    } catch (e) {
+        res.status(500).send({ error: "Failed to update remarks" });
+    }
+};
+

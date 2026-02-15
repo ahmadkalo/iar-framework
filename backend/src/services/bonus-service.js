@@ -32,7 +32,8 @@ exports.computeSocialBonus = async function (db, employeeId, targetYear) {
 };
 
 // Create a proposal
-exports.createSocialBonusProposal = async function (db, employeeId, targetYear, createdBy) {
+exports.createSocialBonusProposal = async function (db, employeeId, targetYear, createdBy, remark) {
+
     const result = await exports.computeSocialBonus(db, employeeId, targetYear);
 
     const proposal = {
@@ -44,21 +45,26 @@ exports.createSocialBonusProposal = async function (db, employeeId, targetYear, 
         proposedValue: result.socialBonus,
         breakdown: result.breakdown,
 
-        status: "PENDING",          // PENDING | APPROVED | REJECTED
+        remark: remark || "",
+
+        status: "PENDING",
         createdAt: new Date(),
         createdBy: createdBy || "unknown",
         decidedAt: null,
         decidedBy: null
     };
 
+
     const insertRes = await db.collection(PROPOSALS_COL).insertOne(proposal);
 
     return {
         proposalId: insertRes.insertedId.toString(),
         message: `Proposal created for ${result.fullName}: ${result.socialBonus}€ (${result.year}). Waiting for CEO approval.`,
+        remark: proposal.remark,
         ...result,
         status: proposal.status
     };
+
 };
 
 // Retrieve a proposal by ID
@@ -131,3 +137,14 @@ exports.rejectProposal = async function (db, proposalId, decidedBy, reason) {
         rejectReason: reason || ""
     };
 };
+
+exports.updateRemarks = async function (db, proposalId, remarks) {
+    const result = await db.collection(PROPOSALS_COL).findOneAndUpdate(
+        { _id: new mongodb.ObjectId(proposalId) },
+        { $set: { remarks: remarks } },
+        { returnDocument: "after" }
+    );
+
+    return result.value;
+};
+
