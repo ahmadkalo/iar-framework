@@ -14,15 +14,14 @@ exports.syncEmployeeFromOrangeHrm = async function (req, res) {
             return res.status(404).send({ message: "Employee not found in OrangeHRM" });
         }
 
-        // 2) Mapping (OrangeHRM Response → dein Mongo-Employee)
-        // Achtung: OrangeHRM Felder können leicht variieren, daher defensiv.
+
         const fullName = hrmEmployee.fullName || hrmEmployee.full_name || "";
         const firstName =
             hrmEmployee.firstName || hrmEmployee.first_name || hrmEmployee.firstname || "";
         const lastName =
             hrmEmployee.lastName || hrmEmployee.last_name || hrmEmployee.lastname || "";
 
-        // department ist evtl. nicht direkt vorhanden → optional leer lassen
+
         const department = hrmEmployee.department?.name || hrmEmployee.department || "";
 
         const employee = new Employee(employeeId, firstName, lastName, fullName, department);

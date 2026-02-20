@@ -49,9 +49,9 @@ exports.createSocialBonusProposal = async function (db, employeeId, targetYear, 
 
         status: "PENDING",
         createdAt: new Date(),
-        createdBy: createdBy || "unknown",
-        decidedAt: null,
-        decidedBy: null
+        createdBy: "HR",
+        decidedAt: "No decision has been made yet",
+        decidedBy: "No decision has been made yet"
     };
 
 
@@ -94,7 +94,7 @@ exports.approveProposalAndStore = async function (db, proposalId, decidedBy) {
         { $set: {
                 status: "APPROVED",
                 decidedAt: new Date(),
-                decidedBy: decidedBy || "unknown"
+                decidedBy: "CEO"
             }}
     );
 
@@ -124,7 +124,7 @@ exports.rejectProposal = async function (db, proposalId, decidedBy, reason) {
         { $set: {
                 status: "REJECTED",
                 decidedAt: new Date(),
-                decidedBy: decidedBy || "unknown",
+                decidedBy: decidedBy || "CEO",
                 rejectReason: reason || ""
             }}
     );

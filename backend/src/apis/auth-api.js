@@ -8,7 +8,7 @@ const authService = require('../services/auth-service');
  * @return {Promise<void>}
  */
 exports.login = function (req, res){
-    const db = req.app.get('db');//get database from express
+    const db = req.app.get('db'); //get database from express
 
     userService.verify(db, req.body).then(user=> { //verify credentials via user-service
         authService.authenticate(req.session, user); //mark session as authenticated
