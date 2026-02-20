@@ -16,10 +16,8 @@ exports.syncEmployeeFromOrangeHrm = async function (req, res) {
 
 
         const fullName = hrmEmployee.fullName || hrmEmployee.full_name || "";
-        const firstName =
-            hrmEmployee.firstName || hrmEmployee.first_name || hrmEmployee.firstname || "";
-        const lastName =
-            hrmEmployee.lastName || hrmEmployee.last_name || hrmEmployee.lastname || "";
+        const firstName = hrmEmployee.firstName || hrmEmployee.first_name || hrmEmployee.firstname || "";
+        const lastName = hrmEmployee.lastName || hrmEmployee.last_name || hrmEmployee.lastname || "";
 
 
         const department = hrmEmployee.department?.name || hrmEmployee.department || "";
